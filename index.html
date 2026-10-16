@@ -243,7 +243,7 @@ footer a { color: inherit; }
   <footer>
     <span>Source: <a href="https://www.timeout.com/film/best-movies-of-all-time" target="_blank" rel="noopener">Time Out, updated September 2026</a></span>
     <span class="sync" id="sync">Your seen list is saved in this browser.</span>
-    <span id="resetWrap"><button class="link-btn" id="btnReset" type="button">Clear seen list</button></span>
+    <span id="resetWrap"><button class="link-btn" id="btnCode" type="button" hidden>Set sync code</button> <button class="link-btn" id="btnReset" type="button">Clear seen list</button></span>
   </footer>
 </div>
 
@@ -367,8 +367,34 @@ let current = (function () {
 })();
 let filter = "all";
 let rolling = false;
-let store = null;
-let queue = Promise.resolve();
+let lastPick = current ? current.rank : null;
+
+// ---- Cross-device sync (Supabase). Leave both values empty to keep everything in this browser only. ----
+const SUPABASE_URL = "https://zamtsyyepzbvzwpiypdc.supabase.co/rest/v1/";      // e.g. "https://abcdxyz.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbXRzeXllcHpidnp3cGl5cGRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNDE2MjIsImV4cCI6MjEwNzcxNzYyMn0.YEYgBjxexlsjfHV1W2auWzxSpbodLIY8C3tUYySWTNk";      // the project's anon / public key
+const CODE_KEY = "film-roulette-code";
+const UPD_KEY = "film-roulette-updated";
+const SYNC_ON = !!(SUPABASE_URL && SUPABASE_KEY);
+
+let syncCode = readCode();
+let updated = Number(lsGet(UPD_KEY)) || 0;
+let pushTimer = null;
+let pushing = Promise.resolve();
+
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function readCode() {
+  // A link like https://you.github.io/film-roulette/#code=YOURCODE sets the code on a new device, then hides it.
+  try {
+    const m = location.hash.match(/code=([^&]+)/);
+    if (m) {
+      const c = decodeURIComponent(m[1]).trim();
+      if (c) localStorage.setItem(CODE_KEY, c);
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  } catch (e) {}
+  return (lsGet(CODE_KEY) || "").trim();
+}
 
 function loadLocal() {
   try {
@@ -381,15 +407,104 @@ function saveLocal() {
 }
 function setSync(msg) { $("sync").textContent = msg || ""; }
 
+function touch() {
+  updated = Date.now();
+  lsSet(UPD_KEY, String(updated));
+}
+
+function rpc(fn, body) {
+  return fetch(SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/rpc/" + fn, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY
+    },
+    body: JSON.stringify(body)
+  }).then(function (r) {
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.status === 204 ? null : r.text().then(function (t) { return t ? JSON.parse(t) : null; });
+  });
+}
+
+function snapshot() {
+  return {
+    ranks: Array.from(seen).sort(function (a, b) { return a - b; }),
+    pick: current ? current.rank : null,
+    updated: updated
+  };
+}
+
+function syncing() { return SYNC_ON && !!syncCode; }
+
+function schedulePush() {
+  if (!syncing()) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(function () {
+    pushTimer = null;
+    const snap = snapshot();
+    pushing = pushing.then(function () {
+      return rpc("set_state", { k: syncCode, v: snap });
+    }).then(function () {
+      setSync("Synced across your devices.");
+    }).catch(function () {
+      setSync("Offline. Saved on this device, will sync next time.");
+    });
+  }, 300);
+}
+
 function persist() {
   saveLocal();
-  if (!store) return;
-  const ranks = Array.from(seen).sort(function (a, b) { return a - b; });
-  queue = queue.then(function () { return store.set({ ranks: ranks }); }).then(function () {
-    setSync("");
+  touch();
+  schedulePush();
+}
+
+function applyRemote(v) {
+  seen = new Set((Array.isArray(v.ranks) ? v.ranks : []).filter(function (n) { return BY_RANK.has(n); }));
+  const r = Number(v.pick);
+  current = BY_RANK.has(r) && !seen.has(r) ? BY_RANK.get(r) : null;
+  lastPick = current ? current.rank : null;
+  updated = Number(v.updated) || 0;
+  lsSet(UPD_KEY, String(updated));
+  saveLocal();
+  if (!rolling) renderAll();
+}
+
+function pull() {
+  if (!syncing() || pushTimer || rolling) return Promise.resolve();
+  return rpc("get_state", { k: syncCode }).then(function (v) {
+    if (pushTimer) return;
+    if (v && typeof v === "object" && Number(v.updated) > updated) {
+      applyRemote(v);
+      setSync("Synced across your devices.");
+    } else if (!v || Number(v.updated) < updated) {
+      schedulePush();
+    } else {
+      setSync("Synced across your devices.");
+    }
   }).catch(function () {
-    setSync("Could not save to the page. Kept on this device only.");
+    setSync("Offline. Saved on this device, will sync next time.");
   });
+}
+
+function syncLabel() {
+  if (!SYNC_ON) return "Your seen list is saved in this browser.";
+  if (!syncCode) return "Saved in this browser. Add a sync code to share it across devices.";
+  return "Syncing…";
+}
+function renderSyncUi() {
+  setSync(syncLabel());
+  const b = $("btnCode");
+  b.hidden = !SYNC_ON;
+  b.textContent = syncCode ? "Change sync code" : "Set sync code";
+}
+function askCode() {
+  const c = window.prompt("Enter your sync code (use the same one on every device). Leave empty to turn sync off on this device.", syncCode);
+  if (c === null) return;
+  syncCode = c.trim();
+  if (syncCode) lsSet(CODE_KEY, syncCode); else { try { localStorage.removeItem(CODE_KEY); } catch (e) {} }
+  renderSyncUi();
+  if (syncCode) pull();
 }
 
 function unseenPool() { return FILMS.filter(function (f) { return !seen.has(f.rank); }); }
@@ -444,6 +559,12 @@ function savePick() {
     if (current) localStorage.setItem(PICK_KEY, String(current.rank));
     else localStorage.removeItem(PICK_KEY);
   } catch (e) {}
+  const r = current ? current.rank : null;
+  if (r !== lastPick) {
+    lastPick = r;
+    touch();
+    schedulePush();
+  }
 }
 
 function renderPick() {
@@ -628,7 +749,14 @@ function disarm() {
   $("btnReset").classList.remove("danger");
 }
 
+$("btnCode").addEventListener("click", askCode);
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState === "visible") pull();
+});
+
 renderAll();
+renderSyncUi();
+pull();
 
 fetch("movies.json").then(function (r) { return r.ok ? r.json() : {}; }).then(function (m) {
   META = m && typeof m === "object" ? m : {};
