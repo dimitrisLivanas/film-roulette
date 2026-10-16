@@ -355,10 +355,16 @@ const FILMS = RAW.split("\n").map(function (line) {
 });
 const BY_RANK = new Map(FILMS.map(function (f) { return [f.rank, f]; }));
 const LS_KEY = "film-roulette-seen";
+const PICK_KEY = "film-roulette-pick";
 const $ = function (id) { return document.getElementById(id); };
 
 let seen = new Set(loadLocal());
-let current = null;
+let current = (function () {
+  try {
+    const r = Number(localStorage.getItem(PICK_KEY));
+    return BY_RANK.has(r) && !seen.has(r) ? BY_RANK.get(r) : null;
+  } catch (e) { return null; }
+})();
 let filter = "all";
 let rolling = false;
 let store = null;
@@ -433,7 +439,15 @@ function renderDetails(f) {
   pl.hidden = !pl.textContent;
 }
 
+function savePick() {
+  try {
+    if (current) localStorage.setItem(PICK_KEY, String(current.rank));
+    else localStorage.removeItem(PICK_KEY);
+  } catch (e) {}
+}
+
 function renderPick() {
+  savePick();
   const pool = unseenPool();
   const idle = !current;
   $("btnPick").hidden = !idle;
