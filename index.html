@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Film Roulette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one cinema-ticket pick panel on top, the full 100-film programme below with tick boxes. */
+:root {
+  color-scheme: light;
+  --bg: #e8eaed;
+  --surface: #f6f7f8;
+  --ink: #14171c;
+  --muted: #5a616b;
+  --line: #cdd1d6;
+  --accent: #c8312b;
+  --accent-ink: #ffffff;
+  --seen: #2f7d5b;
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1114;
+    --surface: #171a1f;
+    --ink: #eceef1;
+    --muted: #9aa1ab;
+    --line: #2a2f36;
+    --accent: #ff5a4e;
+    --accent-ink: #1a0807;
+    --seen: #5bc495;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1114;
+  --surface: #171a1f;
+  --ink: #eceef1;
+  --muted: #9aa1ab;
+  --line: #2a2f36;
+  --accent: #ff5a4e;
+  --accent-ink: #1a0807;
+  --seen: #5bc495;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; }
+.brand { font-family: var(--font-display); font-size: 2rem; line-height: 1.1; margin: 0; font-weight: 400; text-wrap: balance; }
+.brand em { color: var(--accent); }
+.count { font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); letter-spacing: 0.02em; }
+.count b { color: var(--ink); font-weight: 500; }
+
+/* Ticket */
+.ticket {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.ticket .main { padding: 24px 24px 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.eyebrow { font-family: var(--font-data); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.pick-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 7vw, 3.25rem);
+  line-height: 1.04;
+  margin: 0;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.pick-meta { margin: 0; color: var(--muted); min-height: 1.5em; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.06); }
+.btn[hidden] { display: none; }
+.stub {
+  position: relative;
+  border-left: 2px dashed var(--line);
+  min-width: 132px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+.stub::before, .stub::after {
+  content: "";
+  position: absolute;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  left: -12px;
+}
+.stub::before { top: -12px; }
+.stub::after { bottom: -12px; }
+.stub .lab { font-family: var(--font-data); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.stub .num { font-family: var(--font-data); font-weight: 500; font-size: 2.75rem; line-height: 1.1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stub .of { font-family: var(--font-data); font-size: 0.75rem; color: var(--muted); }
+@media (max-width: 560px) {
+  .ticket { grid-template-columns: minmax(0, 1fr); }
+  .stub { border-left: 0; border-top: 2px dashed var(--line); flex-direction: row; gap: 12px; justify-content: center; padding: 14px 20px; min-width: 0; }
+  .stub::before, .stub::after { top: -12px; bottom: auto; }
+  .stub::before { left: -12px; }
+  .stub::after { left: auto; right: -12px; }
+  .stub .num { font-size: 2rem; }
+  .ticket .main { padding: 20px 18px; }
+}
+
+.pickrow { display: flex; gap: 18px; align-items: flex-start; }
+.pickrow .txt { display: flex; flex-direction: column; gap: 10px; min-width: 0; flex: 1; }
+.poster { flex: 0 0 auto; width: 120px; max-width: 30%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); }
+.scores { display: flex; flex-wrap: wrap; gap: 4px 16px; font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); }
+.scores b { font-weight: 500; color: var(--ink); }
+.cast { margin: 0; font-size: 0.875rem; color: var(--muted); }
+.plot { margin: 0; font-size: 0.9375rem; max-width: 60ch; }
+.pickrow [hidden] { display: none; }
+
+/* Programme */
+.prog-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.prog-head h2 { margin: 0; font-size: 0.75rem; font-family: var(--font-data); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 7px 14px; font-size: 0.875rem; font-weight: 500; color: var(--muted); }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+ul.list { list-style: none; margin: 12px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.row {
+  display: grid;
+  grid-template-columns: 28px 3.2ch minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 14px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--line);
+}
+.tick {
+  width: 24px; height: 24px;
+  border: 1.5px solid var(--muted);
+  border-radius: 6px;
+  background: transparent;
+  display: grid; place-items: center;
+  padding: 0;
+}
+.tick::after { content: ""; width: 10px; height: 5px; border-left: 2px solid var(--bg); border-bottom: 2px solid var(--bg); transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+.tick[aria-pressed="true"] { background: var(--seen); border-color: var(--seen); }
+.tick[aria-pressed="true"]::after { opacity: 1; }
+.rk { font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.meta { display: flex; flex-direction: column; min-width: 0; }
+.t { font-weight: 600; overflow-wrap: anywhere; }
+.d { font-size: 0.8125rem; color: var(--muted); }
+.yr { font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.row.is-seen .t { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.row.is-current { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.none { color: var(--muted); padding: 22px 2px; margin: 0; }
+
+footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; font-size: 0.8125rem; color: var(--muted); }
+footer a { color: inherit; }
+.link-btn { background: none; border: 0; padding: 0; text-decoration: underline; color: var(--muted); font-size: inherit; }
+.link-btn.danger { color: var(--accent); }
+.sync { min-height: 1.2em; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="brand">Film <em>Roulette</em></h1>
+    <div class="count" id="count"></div>
+  </header>
+
+  <section class="ticket" aria-live="polite" aria-label="Your pick">
+    <div class="main">
+      <div class="eyebrow" id="eyebrow">Time Out&rsquo;s 100 best movies</div>
+      <div class="pickrow">
+        <img class="poster" id="poster" alt="" referrerpolicy="no-referrer" hidden>
+        <div class="txt">
+          <h2 class="pick-title" id="pickTitle">What are we watching?</h2>
+          <p class="pick-meta" id="pickMeta">Pick draws from the films you haven&rsquo;t marked as seen.</p>
+          <div class="scores" id="scores" hidden></div>
+          <p class="cast" id="cast" hidden></p>
+          <p class="plot" id="plot" hidden></p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="btnPick" type="button">Pick a film</button>
+        <button class="btn primary" id="btnSeen" type="button" hidden>Mark as seen</button>
+        <button class="btn" id="btnAgain" type="button" hidden>Pick another</button>
+      </div>
+    </div>
+    <div class="stub" aria-hidden="true">
+      <span class="lab">Rank</span>
+      <span class="num" id="stubNum">?</span>
+      <span class="of">of 100</span>
+    </div>
+  </section>
+
+  <section>
+    <div class="prog-head">
+      <h2>Programme</h2>
+      <div class="seg" role="group" aria-label="Filter films">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="unseen" aria-pressed="false">Unseen</button>
+        <button type="button" data-filter="seen" aria-pressed="false">Seen</button>
+      </div>
+    </div>
+    <ul class="list" id="list"></ul>
+  </section>
+
+  <footer>
+    <span>Source: <a href="https://www.timeout.com/film/best-movies-of-all-time" target="_blank" rel="noopener">Time Out, updated September 2026</a></span>
+    <span class="sync" id="sync">Your seen list is saved in this browser.</span>
+    <span id="resetWrap"><button class="link-btn" id="btnReset" type="button">Clear seen list</button></span>
+  </footer>
+</div>
+
+<script>
+const RAW = `1|2001: A Space Odyssey|1968|Stanley Kubrick
+2|The Godfather|1972|Francis Ford Coppola
+3|Citizen Kane|1941|Orson Welles
+4|Jeanne Dielman, 23 quai du Commerce, 1080 Bruxelles|1975|Chantal Akerman
+5|Raiders of the Lost Ark|1981|Steven Spielberg
+6|La Dolce Vita|1960|Federico Fellini
+7|Seven Samurai|1954|Akira Kurosawa
+8|In the Mood for Love|2000|Wong Kar-wai
+9|There Will Be Blood|2007|Paul Thomas Anderson
+10|Singin' in the Rain|1952|Stanley Donen, Gene Kelly
+11|Goodfellas|1990|Martin Scorsese
+12|North by Northwest|1959|Alfred Hitchcock
+13|Mulholland Drive|2001|David Lynch
+14|Bicycle Thieves|1948|Vittorio De Sica
+15|The Dark Knight|2008|Christopher Nolan
+16|City Lights|1931|Charlie Chaplin
+17|Grand Illusion|1937|Jean Renoir
+18|His Girl Friday|1940|Howard Hawks
+19|The Red Shoes|1948|Michael Powell, Emeric Pressburger
+20|Vertigo|1958|Alfred Hitchcock
+21|Beau Travail|1999|Claire Denis
+22|The Searchers|1956|John Ford
+23|Persona|1966|Ingmar Bergman
+24|Do the Right Thing|1989|Spike Lee
+25|Rashomon|1950|Akira Kurosawa
+26|The Rules of the Game|1939|Jean Renoir
+27|Jaws|1975|Steven Spielberg
+28|Double Indemnity|1944|Billy Wilder
+29|The 400 Blows|1959|François Truffaut
+30|Star Wars|1977|George Lucas
+31|The Passion of Joan of Arc|1928|Carl Theodor Dreyer
+32|Once Upon a Time in the West|1968|Sergio Leone
+33|Alien|1979|Ridley Scott
+34|Tokyo Story|1953|Yasujiro Ozu
+35|Pulp Fiction|1994|Quentin Tarantino
+36|The Truman Show|1998|Peter Weir
+37|Lawrence of Arabia|1962|David Lean
+38|Psycho|1960|Alfred Hitchcock
+39|Sansho the Bailiff|1954|Kenji Mizoguchi
+40|Andrei Rublev|1966|Andrei Tarkovsky
+41|The Umbrellas of Cherbourg|1964|Jacques Demy
+42|Chinatown|1974|Roman Polanski
+43|The Seventh Seal|1957|Ingmar Bergman
+44|Lost in Translation|2003|Sofia Coppola
+45|Taxi Driver|1976|Martin Scorsese
+46|Spirited Away|2001|Hayao Miyazaki
+47|Night of the Living Dead|1968|George A Romero
+48|Battleship Potemkin|1925|Sergei Eisenstein
+49|Modern Times|1936|Charlie Chaplin
+50|Breathless|1960|Jean-Luc Godard
+51|Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb|1964|Stanley Kubrick
+52|M|1931|Fritz Lang
+53|Blade Runner|1982|Ridley Scott
+54|The Bitter Tears of Petra von Kant|1972|Rainer Werner Fassbinder
+55|Rome, Open City|1945|Roberto Rossellini
+56|Nosferatu|1922|FW Murnau
+57|Airplane!|1980|Jim Abrahams, David Zucker, Jerry Zucker
+58|Mad Max: Fury Road|2015|George Miller
+59|Apocalypse Now|1979|Francis Ford Coppola
+60|Brokeback Mountain|2005|Ang Lee
+61|Duck Soup|1933|Leo McCarey
+62|The Blair Witch Project|1999|Daniel Myrick, Eduardo Sánchez
+63|All the President's Men|1976|Alan J Pakula
+64|The Apu Trilogy|1955–1959|Satyajit Ray
+65|The General|1926|Buster Keaton, Clyde Bruckman
+66|Eternal Sunshine of the Spotless Mind|2004|Michel Gondry
+67|The Texas Chain Saw Massacre|1974|Tobe Hooper
+68|Come and See|1985|Elem Klimov
+69|Heat|1995|Michael Mann
+70|The Shining|1980|Stanley Kubrick
+71|Toy Story|1995|John Lasseter
+72|Killer of Sheep|1977|Charles Burnett
+73|A Woman Under the Influence|1974|John Cassavetes
+74|Annie Hall|1977|Woody Allen
+75|Some Like It Hot|1959|Billy Wilder
+76|Metropolis|1927|Fritz Lang
+77|The Maltese Falcon|1941|John Huston
+78|This Is Spinal Tap|1984|Rob Reiner
+79|It Happened One Night|1934|Frank Capra
+80|Die Hard|1988|John McTiernan
+81|The Conformist|1970|Bernardo Bertolucci
+82|The Thing|1982|John Carpenter
+83|The Zone of Interest|2023|Jonathan Glazer
+84|Daughters of the Dust|1991|Julie Dash
+85|Barry Lyndon|1975|Stanley Kubrick
+86|Raging Bull|1980|Martin Scorsese
+87|Seven|1995|David Fincher
+88|Aguirre, the Wrath of God|1972|Werner Herzog
+89|The Battle of Algiers|1966|Gillo Pontecorvo
+90|No Country for Old Men|2007|Joel and Ethan Coen
+91|Women on the Verge of a Nervous Breakdown|1988|Pedro Almodóvar
+92|The Discreet Charm of the Bourgeoisie|1972|Luis Buñuel
+93|Paths of Glory|1957|Stanley Kubrick
+94|Secrets & Lies|1996|Mike Leigh
+95|Sweet Smell of Success|1957|Alexander Mackendrick
+96|The Cabinet of Dr. Caligari|1920|Robert Wiene
+97|Nashville|1975|Robert Altman
+98|Don't Look Now|1973|Nicolas Roeg
+99|Bonnie and Clyde|1967|Arthur Penn
+100|Get Out|2017|Jordan Peele`;
+
+const FILMS = RAW.split("\n").map(function (line) {
+  const p = line.split("|");
+  return { rank: Number(p[0]), title: p[1], year: p[2], director: p[3] };
+});
+const BY_RANK = new Map(FILMS.map(function (f) { return [f.rank, f]; }));
+const LS_KEY = "film-roulette-seen";
+const $ = function (id) { return document.getElementById(id); };
+
+let seen = new Set(loadLocal());
+let current = null;
+let filter = "all";
+let rolling = false;
+let store = null;
+let queue = Promise.resolve();
+
+function loadLocal() {
+  try {
+    const v = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+    return Array.isArray(v) ? v.filter(function (n) { return BY_RANK.has(n); }) : [];
+  } catch (e) { return []; }
+}
+function saveLocal() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(Array.from(seen))); } catch (e) {}
+}
+function setSync(msg) { $("sync").textContent = msg || ""; }
+
+function persist() {
+  saveLocal();
+  if (!store) return;
+  const ranks = Array.from(seen).sort(function (a, b) { return a - b; });
+  queue = queue.then(function () { return store.set({ ranks: ranks }); }).then(function () {
+    setSync("");
+  }).catch(function () {
+    setSync("Could not save to the page. Kept on this device only.");
+  });
+}
+
+function unseenPool() { return FILMS.filter(function (f) { return !seen.has(f.rank); }); }
+function randInt(n) {
+  const a = new Uint32Array(1);
+  crypto.getRandomValues(a);
+  return a[0] % n;
+}
+function pad(n) { return String(n).padStart(3, "0"); }
+
+function renderCount() {
+  const left = 100 - seen.size;
+  $("count").innerHTML = "<b>" + seen.size + "</b> seen · <b>" + left + "</b> left in the draw";
+}
+
+let META = {};
+function renderDetails(f) {
+  const m = f ? META[f.rank] : null;
+  const p = $("poster"), s = $("scores"), c = $("cast"), pl = $("plot");
+  if (m && m.poster) {
+    p.onerror = function () { p.hidden = true; };
+    p.src = m.poster;
+    p.alt = "Poster for " + f.title;
+    p.hidden = false;
+  } else {
+    p.removeAttribute("src");
+    p.hidden = true;
+  }
+  s.textContent = "";
+  const items = [];
+  if (m && m.imdb) items.push(["IMDb", m.imdb + "/10"]);
+  if (m && m.rt) items.push(["Rotten Tomatoes", m.rt]);
+  if (m && m.metascore) items.push(["Metacritic", m.metascore]);
+  if (m && m.runtime) items.push(["Runtime", m.runtime]);
+  items.forEach(function (it) {
+    const sp = document.createElement("span");
+    sp.appendChild(document.createTextNode(it[0] + " "));
+    const b = document.createElement("b");
+    b.textContent = it[1];
+    sp.appendChild(b);
+    s.appendChild(sp);
+  });
+  s.hidden = !items.length;
+  c.textContent = m && m.actors ? "Starring " + m.actors : "";
+  c.hidden = !c.textContent;
+  pl.textContent = m && m.plot ? m.plot : "";
+  pl.hidden = !pl.textContent;
+}
+
+function renderPick() {
+  const pool = unseenPool();
+  const idle = !current;
+  $("btnPick").hidden = !idle;
+  $("btnSeen").hidden = idle;
+  $("btnAgain").hidden = idle;
+  if (current) {
+    $("eyebrow").textContent = "Tonight’s pick";
+    $("pickTitle").textContent = current.title;
+    $("pickMeta").textContent = current.director + " · " + current.year;
+    $("stubNum").textContent = "#" + current.rank;
+    $("btnAgain").disabled = pool.length < 2;
+    renderDetails(current);
+    return;
+  }
+  $("stubNum").textContent = "?";
+  renderDetails(null);
+  $("eyebrow").textContent = "Time Out’s 100 best movies";
+  if (pool.length === 0) {
+    $("pickTitle").textContent = "That’s all 100.";
+    $("pickMeta").textContent = "Every film is marked as seen. Clear the list below to start over.";
+    $("btnPick").disabled = true;
+  } else {
+    $("pickTitle").textContent = "What are we watching?";
+    $("pickMeta").textContent = "Pick draws from the " + pool.length + " film" + (pool.length === 1 ? "" : "s") + " you haven’t marked as seen.";
+    $("btnPick").disabled = false;
+  }
+}
+
+function renderList(focusRank) {
+  const ul = $("list");
+  const rows = FILMS.filter(function (f) {
+    const s = seen.has(f.rank);
+    return filter === "all" || (filter === "seen" ? s : !s);
+  });
+  if (!rows.length) {
+    ul.innerHTML = "";
+    const li = document.createElement("li");
+    li.className = "none";
+    li.textContent = filter === "seen" ? "Nothing marked as seen yet." : "No unseen films left.";
+    ul.appendChild(li);
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  rows.forEach(function (f) {
+    const s = seen.has(f.rank);
+    const li = document.createElement("li");
+    li.className = "row" + (s ? " is-seen" : "") + (current && current.rank === f.rank ? " is-current" : "");
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "tick";
+    b.dataset.rank = f.rank;
+    b.setAttribute("aria-pressed", s ? "true" : "false");
+    b.setAttribute("aria-label", (s ? "Seen: " : "Mark as seen: ") + f.title);
+    const rk = document.createElement("span");
+    rk.className = "rk";
+    rk.textContent = pad(f.rank);
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    const t = document.createElement("span");
+    t.className = "t";
+    t.textContent = f.title;
+    const d = document.createElement("span");
+    d.className = "d";
+    d.textContent = f.director + (META[f.rank] && META[f.rank].imdb ? " \u00b7 IMDb " + META[f.rank].imdb : "");
+    meta.appendChild(t);
+    meta.appendChild(d);
+    const yr = document.createElement("span");
+    yr.className = "yr";
+    yr.textContent = f.year;
+    li.appendChild(b);
+    li.appendChild(rk);
+    li.appendChild(meta);
+    li.appendChild(yr);
+    frag.appendChild(li);
+  });
+  ul.innerHTML = "";
+  ul.appendChild(frag);
+  if (focusRank != null) {
+    const el = ul.querySelector('.tick[data-rank="' + focusRank + '"]');
+    if (el) el.focus();
+  }
+}
+
+function renderAll(focusRank) {
+  renderCount();
+  renderPick();
+  renderList(focusRank);
+}
+
+function draw() {
+  if (rolling) return;
+  const pool = unseenPool();
+  if (!pool.length) return;
+  let next = pool[randInt(pool.length)];
+  if (current && pool.length > 1) {
+    while (next.rank === current.rank) next = pool[randInt(pool.length)];
+  }
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || pool.length < 4) {
+    current = next;
+    renderAll();
+    return;
+  }
+  rolling = true;
+  renderDetails(null);
+  $("btnPick").hidden = true;
+  $("btnSeen").hidden = true;
+  $("btnAgain").hidden = true;
+  $("eyebrow").textContent = "Drawing…";
+  let ticks = 0;
+  const timer = setInterval(function () {
+    ticks += 1;
+    if (ticks < 12) {
+      const f = pool[randInt(pool.length)];
+      $("pickTitle").textContent = f.title;
+      $("pickMeta").textContent = f.director + " · " + f.year;
+      $("stubNum").textContent = "#" + f.rank;
+    } else {
+      clearInterval(timer);
+      rolling = false;
+      current = next;
+      renderAll();
+    }
+  }, 55);
+}
+
+function toggleSeen(rank) {
+  if (seen.has(rank)) seen.delete(rank); else seen.add(rank);
+  if (current && seen.has(current.rank)) current = null;
+  persist();
+  renderAll(rank);
+}
+
+$("btnPick").addEventListener("click", draw);
+$("btnAgain").addEventListener("click", draw);
+$("btnSeen").addEventListener("click", function () {
+  if (!current) return;
+  seen.add(current.rank);
+  current = null;
+  persist();
+  renderAll();
+});
+$("list").addEventListener("click", function (e) {
+  const b = e.target.closest(".tick");
+  if (b) toggleSeen(Number(b.dataset.rank));
+});
+document.querySelectorAll(".seg button").forEach(function (b) {
+  b.addEventListener("click", function () {
+    filter = b.dataset.filter;
+    document.querySelectorAll(".seg button").forEach(function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    renderList();
+  });
+});
+
+let resetArmed = false;
+let resetTimer = null;
+$("btnReset").addEventListener("click", function () {
+  const btn = $("btnReset");
+  if (!seen.size) return;
+  if (!resetArmed) {
+    resetArmed = true;
+    btn.textContent = "Tap again to clear all " + seen.size + " seen films";
+    btn.classList.add("danger");
+    resetTimer = setTimeout(disarm, 4000);
+    return;
+  }
+  disarm();
+  seen = new Set();
+  persist();
+  renderAll();
+});
+function disarm() {
+  resetArmed = false;
+  clearTimeout(resetTimer);
+  $("btnReset").textContent = "Clear seen list";
+  $("btnReset").classList.remove("danger");
+}
+
+renderAll();
+
+fetch("movies.json").then(function (r) { return r.ok ? r.json() : {}; }).then(function (m) {
+  META = m && typeof m === "object" ? m : {};
+  if (!rolling) renderAll();
+}).catch(function () {});
+
+
+</script>
+
+</body>
+</html>
