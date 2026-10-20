@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Reading List</title>
+<link rel="icon" type="image/png" sizes="64x64" href="data:image/png;base64,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">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMxNDE3MWMiLz4KICA8ZyB0cmFuc2Zvcm09InJvdGF0ZSgtOCAzMiAzMikiPgogICAgPHBhdGggZmlsbD0iI2M4MzEyYiIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMTAgMThhNCA0IDAgMCAxIDQtNGgzNmE0IDQgMCAwIDEgNCA0djcuNWE2LjUgNi41IDAgMCAwIDAgMTNWNDZhNCA0IDAgMCAxLTQgNEgxNGE0IDQgMCAwIDEtNC00di03LjVhNi41IDYuNSAwIDAgMCAwLTEzeiIvPgogICAgPGcgZmlsbD0iI2ZmZiI+PGNpcmNsZSBjeD0iMjQiIGN5PSIyNCIgcj0iMy42Ii8+PGNpcmNsZSBjeD0iNDAiIGN5PSIyNCIgcj0iMy42Ii8+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMy42Ii8+PGNpcmNsZSBjeD0iMjQiIGN5PSI0MCIgcj0iMy42Ii8+PGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMy42Ii8+PC9nPgogIDwvZz4KPC9zdmc+Cg==">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#14171c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one cinema-ticket pick panel on top, the full 100-film programme below with tick boxes. */
+:root {
+  color-scheme: light;
+  --bg: #e8eaed;
+  --surface: #f6f7f8;
+  --ink: #14171c;
+  --muted: #5a616b;
+  --line: #cdd1d6;
+  --accent: #c8312b;
+  --accent-ink: #ffffff;
+  --seen: #2f7d5b;
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1114;
+    --surface: #171a1f;
+    --ink: #eceef1;
+    --muted: #9aa1ab;
+    --line: #2a2f36;
+    --accent: #ff5a4e;
+    --accent-ink: #1a0807;
+    --seen: #5bc495;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1114;
+  --surface: #171a1f;
+  --ink: #eceef1;
+  --muted: #9aa1ab;
+  --line: #2a2f36;
+  --accent: #ff5a4e;
+  --accent-ink: #1a0807;
+  --seen: #5bc495;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; }
+.brand { font-family: var(--font-display); font-size: 2rem; line-height: 1.1; margin: 0; font-weight: 400; text-wrap: balance; }
+.brand em { color: var(--accent); }
+.count { font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); letter-spacing: 0.02em; }
+.count b { color: var(--ink); font-weight: 500; }
+
+/* Ticket */
+.ticket {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.ticket .main { padding: 24px 24px 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.eyebrow { font-family: var(--font-data); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.pick-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 7vw, 3.25rem);
+  line-height: 1.04;
+  margin: 0;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.pick-meta { margin: 0; color: var(--muted); min-height: 1.5em; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.06); }
+.btn[hidden] { display: none; }
+.stub {
+  position: relative;
+  border-left: 2px dashed var(--line);
+  min-width: 132px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+}
+.stub::before, .stub::after {
+  content: "";
+  position: absolute;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  left: -12px;
+}
+.stub::before { top: -12px; }
+.stub::after { bottom: -12px; }
+.stub .lab { font-family: var(--font-data); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.stub .num { font-family: var(--font-data); font-weight: 500; font-size: 2.75rem; line-height: 1.1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stub .of { font-family: var(--font-data); font-size: 0.75rem; color: var(--muted); }
+@media (max-width: 560px) {
+  .ticket { grid-template-columns: minmax(0, 1fr); }
+  .stub { border-left: 0; border-top: 2px dashed var(--line); flex-direction: row; gap: 12px; justify-content: center; padding: 14px 20px; min-width: 0; }
+  .stub::before, .stub::after { top: -12px; bottom: auto; }
+  .stub::before { left: -12px; }
+  .stub::after { left: auto; right: -12px; }
+  .stub .num { font-size: 2rem; }
+  .ticket .main { padding: 20px 18px; }
+}
+
+.pickrow { display: flex; gap: 18px; align-items: flex-start; }
+.pickrow .txt { display: flex; flex-direction: column; gap: 10px; min-width: 0; flex: 1; }
+.poster { flex: 0 0 auto; width: 120px; max-width: 30%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); }
+.scores { display: flex; flex-wrap: wrap; gap: 4px 16px; font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); }
+.scores b { font-weight: 500; color: var(--ink); }
+.cast { margin: 0; font-size: 0.875rem; color: var(--muted); }
+.plot { margin: 0; font-size: 0.9375rem; max-width: 60ch; }
+.pickrow [hidden] { display: none; }
+
+/* Programme */
+.prog-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.prog-head h2 { margin: 0; font-size: 0.75rem; font-family: var(--font-data); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 7px 14px; font-size: 0.875rem; font-weight: 500; color: var(--muted); }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+ul.list { list-style: none; margin: 12px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.row {
+  display: grid;
+  grid-template-columns: 28px 3.2ch minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 14px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--line);
+}
+.tick {
+  width: 24px; height: 24px;
+  border: 1.5px solid var(--muted);
+  border-radius: 6px;
+  background: transparent;
+  display: grid; place-items: center;
+  padding: 0;
+}
+.tick::after { content: ""; width: 10px; height: 5px; border-left: 2px solid var(--bg); border-bottom: 2px solid var(--bg); transform: rotate(-45deg) translate(1px, -1px); opacity: 0; }
+.tick[aria-pressed="true"] { background: var(--seen); border-color: var(--seen); }
+.tick[aria-pressed="true"]::after { opacity: 1; }
+.rk { font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.meta { display: flex; flex-direction: column; min-width: 0; }
+.t { font-weight: 600; overflow-wrap: anywhere; }
+.d { font-size: 0.8125rem; color: var(--muted); }
+.yr { font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.row.is-seen .t { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.row.is-current { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+.none { color: var(--muted); padding: 22px 2px; margin: 0; }
+
+footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; font-size: 0.8125rem; color: var(--muted); }
+footer a { color: inherit; }
+.link-btn { background: none; border: 0; padding: 0; text-decoration: underline; color: var(--muted); font-size: inherit; }
+.link-btn.danger { color: var(--accent); }
+.sync { min-height: 1.2em; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Views and tabs */
+.view { display: flex; flex-direction: column; gap: 28px; }
+.view[hidden] { display: none; }
+.tabs { align-self: flex-start; }
+.brand[hidden] { display: none; }
+
+/* Books: warm paper palette, serif reading text, open-book spread instead of the ticket */
+body[data-view="books"] {
+  --bg: #ece5d6; --surface: #f7f2e7; --ink: #241e16; --muted: #6a6052; --line: #d3c9b4;
+  --accent: #8a2f3b; --accent-ink: #ffffff; --seen: #3f6b4f;
+  --font-read: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  body[data-view="books"] {
+    --bg: #17130f; --surface: #201b15; --ink: #eee6d6; --muted: #a79d8b; --line: #363026;
+    --accent: #e08a93; --accent-ink: #2a0b10; --seen: #7cc09a;
+  }
+}
+.spread {
+  display: grid;
+  grid-template-columns: minmax(150px, 230px) minmax(0, 1fr);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 0 var(--line);
+}
+.pg-l {
+  padding: 26px 22px;
+  display: flex; align-items: flex-start; justify-content: center;
+  background: linear-gradient(to right, transparent 78%, color-mix(in srgb, var(--ink) 8%, transparent));
+}
+.pg-r {
+  padding: 26px 28px 24px;
+  display: flex; flex-direction: column; gap: 10px; min-width: 0;
+  border-left: 1px solid var(--line);
+  background: linear-gradient(to left, transparent 94%, color-mix(in srgb, var(--ink) 5%, transparent));
+}
+.cover {
+  position: relative; width: 100%; max-width: 180px; aspect-ratio: 2 / 3;
+  border-radius: 2px 5px 5px 2px;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.22), inset 3px 0 0 rgb(255 255 255 / 0.14);
+  background: hsl(var(--h, 20) 32% 26%);
+  color: #f3ead8;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 14px 12px; overflow: hidden; text-align: center;
+}
+.cover .ct { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.1; overflow-wrap: anywhere; }
+.cover .ca { font-family: var(--font-data); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.8; }
+.cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cover img[hidden] { display: none; }
+.bk-title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.9rem, 6vw, 2.9rem); line-height: 1.05; margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+.bk-author { margin: 0; font-family: var(--font-read); font-style: italic; font-size: 1.125rem; color: var(--muted); }
+.bk-facts { margin: 0; font-family: var(--font-data); font-size: 0.8125rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 14px; }
+.bk-desc { margin: 0; font-family: var(--font-read); font-size: 1rem; line-height: 1.6; max-width: 62ch; }
+.bk-status { margin: 0; font-size: 0.875rem; color: var(--muted); }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.chips li { font-size: 0.75rem; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
+.spread [hidden] { display: none; }
+a.btn { text-decoration: none; display: inline-block; color: inherit; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.field {
+  font: inherit; font-size: 0.875rem; color: var(--ink);
+  background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px;
+}
+.field::placeholder { color: var(--muted); }
+select.field { padding-right: 6px; }
+.row.bk { grid-template-columns: 28px 3.2ch minmax(0, 1fr); }
+.pickbtn { background: none; border: 0; padding: 0; text-align: left; display: flex; flex-direction: column; min-width: 0; width: 100%; }
+.pickbtn:hover .t { text-decoration: underline; text-decoration-thickness: 1px; }
+.row.is-seen .pickbtn .t { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+@media (max-width: 560px) {
+  .spread { grid-template-columns: minmax(0, 1fr); }
+  .pg-l { padding: 22px 18px 6px; justify-content: flex-start; background: none; }
+  .pg-r { border-left: 0; padding: 14px 18px 20px; background: none; }
+  .cover { max-width: 132px; }
+}
+.seg a { display: block; padding: 7px 14px; font-size: 0.875rem; font-weight: 500; color: var(--muted); text-decoration: none; }
+.seg a + a { border-left: 1px solid var(--line); }
+.seg a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+.tabs { align-self: flex-start; }
+</style>
+</head>
+<body data-view="books">
+<div class="wrap">
+  <nav class="tabs seg" aria-label="Section">
+    <a href="index.html">Films</a>
+    <a href="books.html" aria-current="page">Books</a>
+  </nav>
+
+  <header>
+    <h1 class="brand">The Reading <em>List</em></h1>
+    <div class="count" id="count"></div>
+  </header>
+
+  <section class="spread" id="spread" aria-live="polite" aria-label="Selected book">
+    <div class="pg-l">
+      <div class="cover" id="bkCover">
+        <span class="ct" id="bkCoverT"></span>
+        <span class="ca" id="bkCoverA"></span>
+        <img id="bkImg" alt="" referrerpolicy="no-referrer" hidden>
+      </div>
+    </div>
+    <div class="pg-r">
+      <div class="eyebrow" id="bkEyebrow">Penguin&rsquo;s 100 must-read classics</div>
+      <h2 class="bk-title" id="bkTitle">Choose a book</h2>
+      <p class="bk-author" id="bkAuthor">Select any title in the list to see its details.</p>
+      <p class="bk-facts" id="bkFacts" hidden></p>
+      <p class="bk-status" id="bkStatus" hidden></p>
+      <p class="bk-desc" id="bkDesc" hidden></p>
+      <ul class="chips" id="bkSubjects" hidden></ul>
+      <div class="actions">
+        <button class="btn primary" id="bkRead" type="button" hidden>Mark as read</button>
+        <a class="btn" id="bkLink" target="_blank" rel="noopener" hidden>More on Open Library</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="prog-head">
+      <h2>Reading list</h2>
+      <div class="tools">
+        <input class="field" id="bkSearch" type="search" placeholder="Search title or author" aria-label="Search books">
+        <select class="field" id="bkSort" aria-label="Sort books">
+          <option value="list">Penguin order</option>
+          <option value="title">Title A–Z</option>
+          <option value="author">Author A–Z</option>
+        </select>
+        <div class="seg" role="group" aria-label="Filter books">
+          <button type="button" data-bfilter="all" aria-pressed="true">All</button>
+          <button type="button" data-bfilter="unread" aria-pressed="false">Unread</button>
+          <button type="button" data-bfilter="read" aria-pressed="false">Read</button>
+        </div>
+      </div>
+    </div>
+    <ul class="list" id="bkList"></ul>
+  </section>
+
+  <footer>
+    <span>Source: <a href="https://www.penguin.co.uk/discover/articles/100-must-read-classic-books" target="_blank" rel="noopener">Penguin, readers&rsquo; picks, in no particular order</a>. Details from Open Library.</span>
+    <span class="sync" id="sync"></span>
+    <span id="resetWrap"><button class="link-btn" id="btnCode" type="button" hidden>Set sync code</button> <button class="link-btn" id="btnReset" type="button">Clear read list</button></span>
+  </footer>
+</div>
+
+<script src="config.js"></script>
+<script>
+const BOOK_RAW = `1|Pride and Prejudice|Jane Austen
+2|To Kill a Mockingbird|Harper Lee
+3|The Great Gatsby|F. Scott Fitzgerald
+4|Madonna in a Fur Coat|Sabahattin Ali
+5|One Hundred Years of Solitude|Gabriel García Márquez
+6|In Cold Blood|Truman Capote
+7|Wide Sargasso Sea|Jean Rhys
+8|Brave New World|Aldous Huxley
+9|I Capture the Castle|Dodie Smith
+10|Jane Eyre|Charlotte Brontë
+11|Crime and Punishment|Fyodor Dostoevsky
+12|The Turn of the Screw|Henry James
+13|The Secret History|Donna Tartt
+14|The Call of the Wild|Jack London
+15|Persuasion|Jane Austen
+16|Les Misérables|Victor Hugo
+17|Moby-Dick|Herman Melville
+18|To the Lighthouse|Virginia Woolf
+19|The Death of the Heart|Elizabeth Bowen
+20|Frankenstein|Mary Shelley
+21|The Master and Margarita|Mikhail Bulgakov
+22|The Go-Between|L. P. Hartley
+23|The Iliad|Homer
+24|One Flew Over the Cuckoo's Nest|Ken Kesey
+25|Nineteen Eighty-Four|George Orwell
+26|The Catcher in the Rye|J. D. Salinger
+27|Beloved|Toni Morrison
+28|The Code of the Woosters|P. G. Wodehouse
+29|Dracula|Bram Stoker
+30|The Outsiders|S. E. Hinton
+31|The Chrysalids|John Wyndham
+32|War and Peace|Leo Tolstoy
+33|Great Expectations|Charles Dickens
+34|Another Country|James Baldwin
+35|Catch-22|Joseph Heller
+36|The Age of Innocence|Edith Wharton
+37|Things Fall Apart|Chinua Achebe
+38|Middlemarch|George Eliot
+39|Rebecca|Daphne du Maurier
+40|Tess of the d'Urbervilles|Thomas Hardy
+41|Vanity Fair|William Makepeace Thackeray
+42|Brideshead Revisited|Evelyn Waugh
+43|Madame Bovary|Gustave Flaubert
+44|The Mill on the Floss|George Eliot
+45|Barchester Towers|Anthony Trollope
+46|Lady Chatterley's Lover|D. H. Lawrence
+47|The Count of Monte Cristo|Alexandre Dumas
+48|The Grapes of Wrath|John Steinbeck
+49|Ulysses|James Joyce
+50|East of Eden|John Steinbeck
+51|The Lord of the Rings|J. R. R. Tolkien
+52|The Brothers Karamazov|Fyodor Dostoevsky
+53|Buddenbrooks|Thomas Mann
+54|Lolita|Vladimir Nabokov
+55|Scoop|Evelyn Waugh
+56|Love in a Cold Climate|Nancy Mitford
+57|A Tale of Two Cities|Charles Dickens
+58|Diary of a Nobody|George Grossmith and Weedon Grossmith
+59|Anna Karenina|Leo Tolstoy
+60|The Betrothed|Alessandro Manzoni
+61|Orlando|Virginia Woolf
+62|Atlas Shrugged|Ayn Rand
+63|The Time Machine|H. G. Wells
+64|The Art of War|Sun Tzu
+65|The Forsyte Saga|John Galsworthy
+66|Travels with Charley|John Steinbeck
+67|Tropic of Cancer|Henry Miller
+68|Don Quixote|Miguel de Cervantes
+69|Staying On|Paul Scott
+70|The Quiet American|Graham Greene
+71|Wuthering Heights|Emily Brontë
+72|Perfume|Patrick Süskind
+73|The Adventures of Huckleberry Finn|Mark Twain
+74|Of Human Bondage|W. Somerset Maugham
+75|Bleak House|Charles Dickens
+76|Sense and Sensibility|Jane Austen
+77|The Picture of Dorian Gray|Oscar Wilde
+78|A Christmas Carol|Charles Dickens
+79|Silas Marner|George Eliot
+80|Mrs Dalloway|Virginia Woolf
+81|Little Women|Louisa May Alcott
+82|The Sea, The Sea|Iris Murdoch
+83|David Copperfield|Charles Dickens
+84|The Castle|Franz Kafka
+85|I, Claudius|Robert Graves
+86|I Know Why the Caged Bird Sings|Maya Angelou
+87|A Confederacy of Dunces|John Kennedy Toole
+88|The Razor's Edge|W. Somerset Maugham
+89|Lark Rise to Candleford|Flora Thompson
+90|The Return of the Native|Thomas Hardy
+91|A Portrait of the Artist as a Young Man|James Joyce
+92|Heart of Darkness|Joseph Conrad
+93|North and South|Elizabeth Gaskell
+94|The Handmaid's Tale|Margaret Atwood
+95|Giovanni's Room|James Baldwin
+96|The Godfather|Mario Puzo
+97|The Woman in White|Wilkie Collins
+98|One Day in the Life of Ivan Denisovich|Alexander Solzhenitsyn
+99|White Nights|Fyodor Dostoevsky
+100|Hard Times|Charles Dickens`;
+
+const BOOKS = BOOK_RAW.split("\n").map(function (line) {
+  const p = line.split("|");
+  return { rank: Number(p[0]), title: p[1], author: p[2] };
+});
+const BOOK_BY = new Map(BOOKS.map(function (b) { return [b.rank, b]; }));
+const READ_KEY = "film-roulette-read";
+const BSEL_KEY = "film-roulette-book";
+const BMETA_KEY = "film-roulette-bookmeta-v1";
+const CODE_KEY = "film-roulette-code";            // shared with the films page
+const UPD_KEY = "film-roulette-books-updated";
+const LINK_KEY = "film-roulette-books-linked";
+const $ = function (id) { return document.getElementById(id); };
+function pad(n) { return String(n).padStart(3, "0"); }
+
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+// ---- Sync (Supabase). Config comes from config.js. ----
+const CFG = window.SYNC_CONFIG || {};
+const SUPABASE_URL = CFG.url || "";
+const SUPABASE_KEY = CFG.key || "";
+const SYNC_ON = !!(SUPABASE_URL && SUPABASE_KEY);
+
+function readCode() {
+  try {
+    const m = location.hash.match(/code=([^&]+)/);
+    if (m) {
+      const c = decodeURIComponent(m[1]).trim();
+      if (c) localStorage.setItem(CODE_KEY, c);
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  } catch (e) {}
+  return (lsGet(CODE_KEY) || "").trim();
+}
+
+let read = new Set(loadRead());
+let bookSel = BOOK_BY.has(Number(lsGet(BSEL_KEY))) ? Number(lsGet(BSEL_KEY)) : null;
+let bookFilter = "all";
+let bookQuery = "";
+let bookSort = "list";
+let syncCode = readCode();
+let updated = Number(lsGet(UPD_KEY)) || 0;
+let pushTimer = null;
+let pushing = Promise.resolve();
+
+function loadRead() {
+  try {
+    const v = JSON.parse(localStorage.getItem(READ_KEY) || "[]");
+    return Array.isArray(v) ? v.filter(function (n) { return BOOK_BY.has(n); }) : [];
+  } catch (e) { return []; }
+}
+function saveLocal() { lsSet(READ_KEY, JSON.stringify(Array.from(read))); }
+function setSync(msg) { $("sync").textContent = msg || ""; }
+function remoteKey() { return syncCode + ":books"; }   // separate record from the films page
+function touch() { updated = Date.now(); lsSet(UPD_KEY, String(updated)); }
+
+function authHeaders() {
+  const h = { "Content-Type": "application/json", apikey: SUPABASE_KEY };
+  if (/^eyJ/.test(SUPABASE_KEY)) h.Authorization = "Bearer " + SUPABASE_KEY;
+  return h;
+}
+function rpc(fn, body) {
+  return fetch(SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/rpc/" + fn, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify(body)
+  }).then(function (r) {
+    if (!r.ok) {
+      return r.text().then(function (t) {
+        let m = "";
+        try { m = JSON.parse(t).message || ""; } catch (e) {}
+        throw new Error("HTTP " + r.status + (m ? " " + m : ""));
+      });
+    }
+    return r.status === 204 ? null : r.text().then(function (t) { return t ? JSON.parse(t) : null; });
+  });
+}
+function snapshot() {
+  return { read: Array.from(read).sort(function (a, b) { return a - b; }), updated: updated };
+}
+function syncing() { return SYNC_ON && !!syncCode; }
+function schedulePush() {
+  if (!syncing()) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(function () {
+    pushTimer = null;
+    const snap = snapshot();
+    pushing = pushing.then(function () {
+      return rpc("set_state", { k: remoteKey(), v: snap });
+    }).then(function () {
+      setSync("Synced across your devices.");
+    }).catch(function (e) {
+      setSync("Sync failed (" + e.message + "). Saved on this device.");
+    });
+  }, 300);
+}
+function persist() { saveLocal(); touch(); schedulePush(); }
+function pull() {
+  if (!syncing() || pushTimer) return Promise.resolve();
+  return rpc("get_state", { k: remoteKey() }).then(function (v) {
+    if (pushTimer) return;
+    if (lsGet(LINK_KEY) !== syncCode) {
+      // First time this device uses this code: merge both lists so nothing already marked is lost.
+      if (v && Array.isArray(v.read)) v.read.forEach(function (n) { if (BOOK_BY.has(n)) read.add(n); });
+      saveLocal();
+      renderAll();
+      lsSet(LINK_KEY, syncCode);
+      touch();
+      schedulePush();
+      return;
+    }
+    if (v && typeof v === "object" && Number(v.updated) > updated) {
+      read = new Set((Array.isArray(v.read) ? v.read : []).filter(function (n) { return BOOK_BY.has(n); }));
+      updated = Number(v.updated) || 0;
+      lsSet(UPD_KEY, String(updated));
+      saveLocal();
+      renderAll();
+      setSync("Synced across your devices.");
+    } else if (!v || Number(v.updated) < updated) {
+      schedulePush();
+    } else {
+      setSync("Synced across your devices.");
+    }
+  }).catch(function (e) {
+    setSync("Sync failed (" + e.message + "). Saved on this device.");
+  });
+}
+function syncLabel() {
+  if (!SYNC_ON) return "Your read list is saved in this browser.";
+  if (!syncCode) return "Saved in this browser. Add a sync code to share it across devices.";
+  return "Syncing…";
+}
+function renderSyncUi() {
+  setSync(syncLabel());
+  const b = $("btnCode");
+  b.hidden = !SYNC_ON;
+  b.textContent = syncCode ? "Change sync code" : "Set sync code";
+}
+function askCode() {
+  const c = window.prompt("Enter your sync code (use the same one on every device). Leave empty to turn sync off on this device.", syncCode);
+  if (c === null) return;
+  syncCode = c.trim();
+  if (syncCode) lsSet(CODE_KEY, syncCode); else { try { localStorage.removeItem(CODE_KEY); } catch (e) {} }
+  renderSyncUi();
+  if (syncCode) pull();
+}
+
+function renderCount() {
+  $("count").innerHTML = "<b>" + read.size + "</b> read · <b>" + (100 - read.size) + "</b> to go";
+}
+function renderAll() { renderCount(); renderBooks(); }
+
+// ---- Books ----
+let BMETA = (function () {
+  try { const v = JSON.parse(lsGet(BMETA_KEY) || "{}"); return v && typeof v === "object" ? v : {}; } catch (e) { return {}; }
+})();
+const BLOADING = {};
+const BFAILED = {};
+
+function surname(author) {
+  const first = author.split(/ and /)[0].trim();
+  const last = first.split(/\s+/).pop();
+  return last;
+}
+function sortKey(b, how) {
+  if (how === "title") return b.title.replace(/^(the|a|an)\s+/i, "").toLowerCase();
+  return surname(b.author).toLowerCase() + " " + b.title.toLowerCase();
+}
+function olGet(url) {
+  return fetch(url).then(function (r) {
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  });
+}
+function cleanDesc(d) {
+  let t = typeof d === "string" ? d : (d && typeof d.value === "string" ? d.value : "");
+  t = t.split(/\r?\n-{3,}|\r?\n\r?\n\(?\[?Source/i)[0];
+  t = t.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/[*_`#>]/g, "").replace(/\s+/g, " ").trim();
+  if (t.length > 700) {
+    const cut = t.slice(0, 700);
+    const i = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("! "), cut.lastIndexOf("? "));
+    t = i > 300 ? cut.slice(0, i + 1) : cut.replace(/\s+\S*$/, "") + "…";
+  }
+  return t;
+}
+function cleanSubjects(list) {
+  const out = [];
+  (Array.isArray(list) ? list : []).forEach(function (s) {
+    if (typeof s !== "string") return;
+    const t = s.trim();
+    if (!t || t.length > 28) return;
+    if (/^(nyt:|reading level|open_syllabus|large type|protected daisy|in library|accessible|lending library|internet archive|overdrive|series:|translations|.*\bcollection\b)/i.test(t)) return;
+    if (/^[a-z]+:[^ ]/.test(t)) return;
+    if (out.some(function (x) { return x.toLowerCase() === t.toLowerCase(); })) return;
+    out.push(t);
+  });
+  return out.slice(0, 6);
+}
+function loadBookMeta(rank) {
+  if (BMETA[rank]) return Promise.resolve(BMETA[rank]);
+  if (BLOADING[rank]) return BLOADING[rank];
+  const b = BOOK_BY.get(rank);
+  const fix = { Dostoyevsky: "Dostoevsky", "Sun-Tzu": "Sun Tzu" };
+  let au = surname(b.author);
+  au = fix[au] || au;
+  if (b.author === "Sun Tzu") au = "Sun Tzu";
+  const url = "https://openlibrary.org/search.json?title=" + encodeURIComponent(b.title) +
+    "&author=" + encodeURIComponent(au) +
+    "&limit=5&fields=key,title,author_name,first_publish_year,cover_i,number_of_pages_median,subject,ratings_average,ratings_count";
+  const p = olGet(url).then(function (d) {
+    const docs = (d && d.docs) || [];
+    const doc = docs.find(function (x) { return x.cover_i; }) || docs[0];
+    if (!doc) { BFAILED[rank] = "notfound"; return null; }
+    const meta = {
+      key: doc.key || null,
+      year: doc.first_publish_year || null,
+      cover: doc.cover_i || null,
+      pages: doc.number_of_pages_median || null,
+      rating: doc.ratings_average ? Math.round(doc.ratings_average * 10) / 10 : null,
+      ratings: doc.ratings_count || null,
+      subjects: cleanSubjects(doc.subject),
+      desc: ""
+    };
+    const worksUrl = doc.key ? "https://openlibrary.org" + doc.key + ".json" : null;
+    const finish = function () {
+      BMETA[rank] = meta;
+      lsSet(BMETA_KEY, JSON.stringify(BMETA));
+      delete BFAILED[rank];
+      return meta;
+    };
+    if (!worksUrl) return finish();
+    return olGet(worksUrl).then(function (w) {
+      meta.desc = cleanDesc(w && w.description);
+      const s = cleanSubjects(w && w.subjects);
+      if (s.length >= 3) meta.subjects = s;
+    }).catch(function () {}).then(finish);
+  }).catch(function (e) {
+    BFAILED[rank] = "network";
+    return null;
+  }).then(function (m) {
+    delete BLOADING[rank];
+    return m;
+  });
+  BLOADING[rank] = p;
+  return p;
+}
+
+function setText(id, t) {
+  const el = $(id);
+  el.textContent = t || "";
+  el.hidden = !t;
+}
+function renderSpread() {
+  const b = bookSel ? BOOK_BY.get(bookSel) : null;
+  const img = $("bkImg");
+  if (!b) {
+    $("bkCoverT").textContent = "";
+    $("bkCoverA").textContent = "";
+    $("bkCover").style.removeProperty("--h");
+    img.hidden = true;
+    img.removeAttribute("src");
+    $("bkEyebrow").textContent = "Penguin’s 100 must-read classics";
+    $("bkTitle").textContent = "Choose a book";
+    $("bkAuthor").textContent = "Select any title in the list to see its details.";
+    ["bkFacts", "bkStatus", "bkDesc"].forEach(function (id) { setText(id, ""); });
+    $("bkSubjects").hidden = true;
+    $("bkRead").hidden = true;
+    $("bkLink").hidden = true;
+    return;
+  }
+  const m = BMETA[b.rank];
+  const isRead = read.has(b.rank);
+  $("bkCover").style.setProperty("--h", String((b.rank * 47) % 360));
+  $("bkCoverT").textContent = b.title;
+  $("bkCoverA").textContent = b.author;
+  if (m && m.cover) {
+    img.onerror = function () { img.hidden = true; };
+    img.src = "https://covers.openlibrary.org/b/id/" + m.cover + "-L.jpg";
+    img.alt = "Cover of " + b.title;
+    img.hidden = false;
+  } else {
+    img.hidden = true;
+    img.removeAttribute("src");
+  }
+  $("bkEyebrow").textContent = "No. " + b.rank + " of 100" + (isRead ? " · Read" : "");
+  $("bkTitle").textContent = b.title;
+  $("bkAuthor").textContent = b.author;
+  const facts = $("bkFacts");
+  facts.textContent = "";
+  const items = [];
+  if (m && m.year) items.push(["First published", String(m.year)]);
+  if (m && m.pages) items.push(["Pages", String(m.pages)]);
+  if (m && m.rating) items.push(["Rating", m.rating + "/5" + (m.ratings ? " (" + m.ratings.toLocaleString() + ")" : "")]);
+  items.forEach(function (it) {
+    const sp = document.createElement("span");
+    sp.appendChild(document.createTextNode(it[0] + " "));
+    const bb = document.createElement("b");
+    bb.textContent = it[1];
+    sp.appendChild(bb);
+    facts.appendChild(sp);
+  });
+  facts.hidden = !items.length;
+  let status = "";
+  if (!m) {
+    if (BLOADING[b.rank]) status = "Loading details…";
+    else if (BFAILED[b.rank] === "notfound") status = "No details found for this one.";
+    else if (BFAILED[b.rank]) status = "Couldn’t load details. Check your connection and select the book again.";
+  }
+  setText("bkStatus", status);
+  setText("bkDesc", m && m.desc ? m.desc : "");
+  const chips = $("bkSubjects");
+  chips.textContent = "";
+  ((m && m.subjects) || []).forEach(function (s) {
+    const li = document.createElement("li");
+    li.textContent = s;
+    chips.appendChild(li);
+  });
+  chips.hidden = !chips.children.length;
+  const rb = $("bkRead");
+  rb.hidden = false;
+  rb.textContent = isRead ? "Marked as read · undo" : "Mark as read";
+  rb.className = isRead ? "btn" : "btn primary";
+  const link = $("bkLink");
+  link.href = m && m.key ? "https://openlibrary.org" + m.key : "https://openlibrary.org/search?q=" + encodeURIComponent(b.title + " " + b.author);
+  link.hidden = false;
+}
+
+function visibleBooks() {
+  const q = bookQuery.trim().toLowerCase();
+  const rows = BOOKS.filter(function (b) {
+    const r = read.has(b.rank);
+    if (bookFilter === "read" && !r) return false;
+    if (bookFilter === "unread" && r) return false;
+    return !q || b.title.toLowerCase().indexOf(q) !== -1 || b.author.toLowerCase().indexOf(q) !== -1;
+  });
+  if (bookSort !== "list") {
+    rows.sort(function (a, b) {
+      const x = sortKey(a, bookSort), y = sortKey(b, bookSort);
+      return x < y ? -1 : x > y ? 1 : 0;
+    });
+  }
+  return rows;
+}
+
+function renderBooks(focusRank, focusKind) {
+  renderSpread();
+  const ul = $("bkList");
+  const rows = visibleBooks();
+  if (!rows.length) {
+    ul.innerHTML = "";
+    const li = document.createElement("li");
+    li.className = "none";
+    li.textContent = bookQuery.trim() ? "No books match that search." : bookFilter === "read" ? "Nothing marked as read yet." : "No unread books left.";
+    ul.appendChild(li);
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  rows.forEach(function (b) {
+    const r = read.has(b.rank);
+    const li = document.createElement("li");
+    li.className = "row bk" + (r ? " is-seen" : "") + (bookSel === b.rank ? " is-current" : "");
+    const tick = document.createElement("button");
+    tick.type = "button";
+    tick.className = "tick";
+    tick.dataset.rank = b.rank;
+    tick.setAttribute("aria-pressed", r ? "true" : "false");
+    tick.setAttribute("aria-label", (r ? "Read: " : "Mark as read: ") + b.title);
+    const rk = document.createElement("span");
+    rk.className = "rk";
+    rk.textContent = pad(b.rank);
+    const pick = document.createElement("button");
+    pick.type = "button";
+    pick.className = "pickbtn";
+    pick.dataset.rank = b.rank;
+    if (bookSel === b.rank) pick.setAttribute("aria-current", "true");
+    const t = document.createElement("span");
+    t.className = "t";
+    t.textContent = b.title;
+    const d = document.createElement("span");
+    d.className = "d";
+    d.textContent = b.author;
+    pick.appendChild(t);
+    pick.appendChild(d);
+    li.appendChild(tick);
+    li.appendChild(rk);
+    li.appendChild(pick);
+    frag.appendChild(li);
+  });
+  ul.innerHTML = "";
+  ul.appendChild(frag);
+  if (focusRank != null) {
+    const el = ul.querySelector((focusKind === "pick" ? ".pickbtn" : ".tick") + '[data-rank="' + focusRank + '"]');
+    if (el) el.focus({ preventScroll: true });
+  }
+}
+
+function selectBook(rank) {
+  bookSel = rank;
+  lsSet(BSEL_KEY, String(rank));
+  renderBooks(rank, "pick");
+  const sp = $("spread");
+  if (sp.getBoundingClientRect().top < 0) {
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    sp.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+  }
+  if (!BMETA[rank]) {
+    loadBookMeta(rank).then(function () { if (bookSel === rank) renderSpread(); });
+  }
+}
+function toggleRead(rank, focusKind) {
+  if (read.has(rank)) read.delete(rank); else read.add(rank);
+  persist();
+  renderCount();
+  renderBooks(rank, focusKind || "tick");
+}
+
+
+let resetArmed = false;
+let resetTimer = null;
+function disarm() {
+  resetArmed = false;
+  clearTimeout(resetTimer);
+  $("btnReset").textContent = "Clear read list";
+  $("btnReset").classList.remove("danger");
+}
+$("btnReset").addEventListener("click", function () {
+  const btn = $("btnReset");
+  if (!read.size) return;
+  if (!resetArmed) {
+    resetArmed = true;
+    btn.textContent = "Tap again to clear all " + read.size + " read books";
+    btn.classList.add("danger");
+    resetTimer = setTimeout(disarm, 4000);
+    return;
+  }
+  disarm();
+  read = new Set();
+  persist();
+  renderAll();
+});
+$("btnCode").addEventListener("click", askCode);
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState === "visible") pull();
+});
+$("bkList").addEventListener("click", function (e) {
+  const t = e.target.closest(".tick");
+  if (t) { toggleRead(Number(t.dataset.rank), "tick"); return; }
+  const pk = e.target.closest(".pickbtn");
+  if (pk) selectBook(Number(pk.dataset.rank));
+});
+$("bkRead").addEventListener("click", function () { if (bookSel) toggleRead(bookSel, "pick"); });
+$("bkSearch").addEventListener("input", function (e) { bookQuery = e.target.value; renderBooks(); });
+$("bkSort").addEventListener("change", function (e) { bookSort = e.target.value; renderBooks(); });
+document.querySelectorAll("[data-bfilter]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    bookFilter = b.dataset.bfilter;
+    document.querySelectorAll("[data-bfilter]").forEach(function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    renderBooks();
+  });
+});
+
+renderAll();
+renderSyncUi();
+pull();
+if (bookSel && !BMETA[bookSel]) {
+  const r0 = bookSel;
+  loadBookMeta(r0).then(function () { if (bookSel === r0) renderSpread(); });
+}
+</script>
+</body>
+</html>
