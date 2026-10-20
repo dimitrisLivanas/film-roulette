@@ -279,6 +279,9 @@ select.field { padding-right: 6px; }
 .seg a + a { border-left: 1px solid var(--line); }
 .seg a[aria-current="page"] { background: var(--ink); color: var(--bg); }
 .tabs { align-self: flex-start; }
+.badge { margin-left: 8px; font-family: var(--font-data); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); border: 1px solid currentColor; border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+.row.is-reading .tick { border-color: var(--accent); }
+.btn.on { border-color: var(--accent); color: var(--accent); }
 </style>
 </head>
 <body data-view="books">
@@ -310,7 +313,8 @@ select.field { padding-right: 6px; }
       <p class="bk-desc" id="bkDesc" hidden></p>
       <ul class="chips" id="bkSubjects" hidden></ul>
       <div class="actions">
-        <button class="btn primary" id="bkRead" type="button" hidden>Mark as read</button>
+        <button class="btn primary" id="bkReading" type="button" hidden>Start reading</button>
+        <button class="btn" id="bkRead" type="button" hidden>Mark as read</button>
         <a class="btn" id="bkLink" target="_blank" rel="noopener" hidden>More on Open Library</a>
       </div>
     </div>
@@ -329,6 +333,7 @@ select.field { padding-right: 6px; }
         <div class="seg" role="group" aria-label="Filter books">
           <button type="button" data-bfilter="all" aria-pressed="true">All</button>
           <button type="button" data-bfilter="unread" aria-pressed="false">Unread</button>
+          <button type="button" data-bfilter="reading" aria-pressed="false">Reading</button>
           <button type="button" data-bfilter="read" aria-pressed="false">Read</button>
         </div>
       </div>
@@ -452,6 +457,7 @@ const BOOKS = BOOK_RAW.split("\n").map(function (line) {
 });
 const BOOK_BY = new Map(BOOKS.map(function (b) { return [b.rank, b]; }));
 const READ_KEY = "film-roulette-read";
+const READING_KEY = "film-roulette-reading";
 const BSEL_KEY = "film-roulette-book";
 const BMETA_KEY = "film-roulette-bookmeta-v1";
 const CODE_KEY = "film-roulette-code";            // shared with the films page
@@ -482,6 +488,8 @@ function readCode() {
 }
 
 let read = new Set(loadRead());
+let reading = new Set(loadList(READING_KEY));
+reading.forEach(function (n) { if (read.has(n)) reading.delete(n); });
 let bookSel = BOOK_BY.has(Number(lsGet(BSEL_KEY))) ? Number(lsGet(BSEL_KEY)) : null;
 let bookFilter = "all";
 let bookQuery = "";
@@ -497,7 +505,16 @@ function loadRead() {
     return Array.isArray(v) ? v.filter(function (n) { return BOOK_BY.has(n); }) : [];
   } catch (e) { return []; }
 }
-function saveLocal() { lsSet(READ_KEY, JSON.stringify(Array.from(read))); }
+function loadList(key) {
+  try {
+    const v = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(v) ? v.filter(function (n) { return BOOK_BY.has(n); }) : [];
+  } catch (e) { return []; }
+}
+function saveLocal() {
+  lsSet(READ_KEY, JSON.stringify(Array.from(read)));
+  lsSet(READING_KEY, JSON.stringify(Array.from(reading)));
+}
 function setSync(msg) { $("sync").textContent = msg || ""; }
 function remoteKey() { return syncCode + ":books"; }   // separate record from the films page
 function touch() { updated = Date.now(); lsSet(UPD_KEY, String(updated)); }
@@ -524,7 +541,11 @@ function rpc(fn, body) {
   });
 }
 function snapshot() {
-  return { read: Array.from(read).sort(function (a, b) { return a - b; }), updated: updated };
+  return {
+    read: Array.from(read).sort(function (a, b) { return a - b; }),
+    reading: Array.from(reading).sort(function (a, b) { return a - b; }),
+    updated: updated
+  };
 }
 function syncing() { return SYNC_ON && !!syncCode; }
 function schedulePush() {
@@ -550,6 +571,8 @@ function pull() {
     if (lsGet(LINK_KEY) !== syncCode) {
       // First time this device uses this code: merge both lists so nothing already marked is lost.
       if (v && Array.isArray(v.read)) v.read.forEach(function (n) { if (BOOK_BY.has(n)) read.add(n); });
+      if (v && Array.isArray(v.reading)) v.reading.forEach(function (n) { if (BOOK_BY.has(n)) reading.add(n); });
+      read.forEach(function (n) { reading.delete(n); });
       saveLocal();
       renderAll();
       lsSet(LINK_KEY, syncCode);
@@ -559,6 +582,7 @@ function pull() {
     }
     if (v && typeof v === "object" && Number(v.updated) > updated) {
       read = new Set((Array.isArray(v.read) ? v.read : []).filter(function (n) { return BOOK_BY.has(n); }));
+      reading = new Set((Array.isArray(v.reading) ? v.reading : []).filter(function (n) { return BOOK_BY.has(n) && !read.has(n); }));
       updated = Number(v.updated) || 0;
       lsSet(UPD_KEY, String(updated));
       saveLocal();
@@ -594,7 +618,9 @@ function askCode() {
 }
 
 function renderCount() {
-  $("count").innerHTML = "<b>" + read.size + "</b> read · <b>" + (100 - read.size) + "</b> to go";
+  $("count").innerHTML = "<b>" + read.size + "</b> read · " +
+    (reading.size ? "<b>" + reading.size + "</b> reading · " : "") +
+    "<b>" + (100 - read.size) + "</b> to go";
 }
 function renderAll() { renderCount(); renderBooks(); }
 
@@ -713,11 +739,13 @@ function renderSpread() {
     ["bkFacts", "bkStatus", "bkDesc"].forEach(function (id) { setText(id, ""); });
     $("bkSubjects").hidden = true;
     $("bkRead").hidden = true;
+    $("bkReading").hidden = true;
     $("bkLink").hidden = true;
     return;
   }
   const m = BMETA[b.rank];
   const isRead = read.has(b.rank);
+  const isReading = reading.has(b.rank);
   $("bkCover").style.setProperty("--h", String((b.rank * 47) % 360));
   $("bkCoverT").textContent = b.title;
   $("bkCoverA").textContent = b.author;
@@ -730,7 +758,7 @@ function renderSpread() {
     img.hidden = true;
     img.removeAttribute("src");
   }
-  $("bkEyebrow").textContent = "No. " + b.rank + " of 100" + (isRead ? " · Read" : "");
+  $("bkEyebrow").textContent = "No. " + b.rank + " of 100" + (isRead ? " · Read" : isReading ? " · Reading now" : "");
   $("bkTitle").textContent = b.title;
   $("bkAuthor").textContent = b.author;
   const facts = $("bkFacts");
@@ -767,7 +795,11 @@ function renderSpread() {
   const rb = $("bkRead");
   rb.hidden = false;
   rb.textContent = isRead ? "Marked as read · undo" : "Mark as read";
-  rb.className = isRead ? "btn" : "btn primary";
+  rb.className = isReading ? "btn primary" : "btn";
+  const gb = $("bkReading");
+  gb.hidden = isRead;
+  gb.textContent = isReading ? "Reading now · stop" : "Start reading";
+  gb.className = isReading ? "btn on" : "btn primary";
   const link = $("bkLink");
   link.href = m && m.key ? "https://openlibrary.org" + m.key : "https://openlibrary.org/search?q=" + encodeURIComponent(b.title + " " + b.author);
   link.hidden = false;
@@ -777,8 +809,10 @@ function visibleBooks() {
   const q = bookQuery.trim().toLowerCase();
   const rows = BOOKS.filter(function (b) {
     const r = read.has(b.rank);
+    const g = reading.has(b.rank);
     if (bookFilter === "read" && !r) return false;
-    if (bookFilter === "unread" && r) return false;
+    if (bookFilter === "reading" && !g) return false;
+    if (bookFilter === "unread" && (r || g)) return false;
     return !q || b.title.toLowerCase().indexOf(q) !== -1 || b.author.toLowerCase().indexOf(q) !== -1;
   });
   if (bookSort !== "list") {
@@ -798,7 +832,7 @@ function renderBooks(focusRank, focusKind) {
     ul.innerHTML = "";
     const li = document.createElement("li");
     li.className = "none";
-    li.textContent = bookQuery.trim() ? "No books match that search." : bookFilter === "read" ? "Nothing marked as read yet." : "No unread books left.";
+    li.textContent = bookQuery.trim() ? "No books match that search." : bookFilter === "read" ? "Nothing marked as read yet." : bookFilter === "reading" ? "Nothing in progress. Open a book and choose Start reading." : "No unread books left.";
     ul.appendChild(li);
     return;
   }
@@ -806,7 +840,8 @@ function renderBooks(focusRank, focusKind) {
   rows.forEach(function (b) {
     const r = read.has(b.rank);
     const li = document.createElement("li");
-    li.className = "row bk" + (r ? " is-seen" : "") + (bookSel === b.rank ? " is-current" : "");
+    const g = reading.has(b.rank);
+    li.className = "row bk" + (r ? " is-seen" : "") + (g ? " is-reading" : "") + (bookSel === b.rank ? " is-current" : "");
     const tick = document.createElement("button");
     tick.type = "button";
     tick.className = "tick";
@@ -827,6 +862,12 @@ function renderBooks(focusRank, focusKind) {
     const d = document.createElement("span");
     d.className = "d";
     d.textContent = b.author;
+    if (g) {
+      const bd = document.createElement("span");
+      bd.className = "badge";
+      bd.textContent = "Reading";
+      d.appendChild(bd);
+    }
     pick.appendChild(t);
     pick.appendChild(d);
     li.appendChild(tick);
@@ -855,8 +896,14 @@ function selectBook(rank) {
     loadBookMeta(rank).then(function () { if (bookSel === rank) renderSpread(); });
   }
 }
+function toggleReading(rank, focusKind) {
+  if (reading.has(rank)) reading.delete(rank); else { reading.add(rank); read.delete(rank); }
+  persist();
+  renderCount();
+  renderBooks(rank, focusKind || "pick");
+}
 function toggleRead(rank, focusKind) {
-  if (read.has(rank)) read.delete(rank); else read.add(rank);
+  if (read.has(rank)) read.delete(rank); else { read.add(rank); reading.delete(rank); }
   persist();
   renderCount();
   renderBooks(rank, focusKind || "tick");
@@ -873,16 +920,17 @@ function disarm() {
 }
 $("btnReset").addEventListener("click", function () {
   const btn = $("btnReset");
-  if (!read.size) return;
+  if (!read.size && !reading.size) return;
   if (!resetArmed) {
     resetArmed = true;
-    btn.textContent = "Tap again to clear all " + read.size + " read books";
+    btn.textContent = "Tap again to clear all " + read.size + " read" + (reading.size ? " and " + reading.size + " in progress" : "") + " books";
     btn.classList.add("danger");
     resetTimer = setTimeout(disarm, 4000);
     return;
   }
   disarm();
   read = new Set();
+  reading = new Set();
   persist();
   renderAll();
 });
@@ -897,6 +945,7 @@ $("bkList").addEventListener("click", function (e) {
   if (pk) selectBook(Number(pk.dataset.rank));
 });
 $("bkRead").addEventListener("click", function () { if (bookSel) toggleRead(bookSel, "pick"); });
+$("bkReading").addEventListener("click", function () { if (bookSel) toggleReading(bookSel, "pick"); });
 $("bkSearch").addEventListener("input", function (e) { bookQuery = e.target.value; renderBooks(); });
 $("bkSort").addEventListener("change", function (e) { bookSort = e.target.value; renderBooks(); });
 document.querySelectorAll("[data-bfilter]").forEach(function (b) {
